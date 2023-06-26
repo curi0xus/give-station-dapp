@@ -40,6 +40,11 @@ contract Project{
     State public state = State.Fundraising; 
     bool public isRevealed = false;
     bool public isVerified = false;
+    string public websiteUrl;
+    string public socialUrl;
+    string public githubUrl;
+    string public projectCoverUrl;
+    string public filterTags;
 
     mapping (address => uint) public contributiors;
     mapping (uint256 => WithdrawRequest) public withdrawRequests;
@@ -117,8 +122,14 @@ contract Project{
        uint256 _deadline,
        uint256 _targetContribution,
        string memory _projectTitle,
-       string memory _projectDes
+       string memory _projectDes, 
+       string memory _websiteUrl, 
+       string memory _socialUrl, 
+       string memory _githubUrl,
+       string memory _projectCoverUrl, 
+       string memory _filterTags
    ) {
+        console.log(_filterTags);
         admin = payable(_owner);
         creator = payable(_creator);
         masterContract = payable(_masterContract);
@@ -128,6 +139,11 @@ contract Project{
         projectTitle = _projectTitle;
         projectDes = _projectDes;
         raisedAmount = 0;
+        websiteUrl = _websiteUrl; 
+        socialUrl = _socialUrl;
+        githubUrl = _githubUrl;
+        filterTags = _filterTags;
+        projectCoverUrl = _projectCoverUrl;
    }
 
     function setRoyaltyGracePeriod (uint256 unixTs) external isAdmin() {
@@ -260,7 +276,11 @@ contract Project{
         string memory title,
         string memory desc,
         State currentState,
-        uint256 balance
+        uint256 balance,
+        string memory website, 
+        string memory social, 
+        string memory github,
+        string memory projectCover
     ){
         projectStarter=creator;
         minContribution=minimumContribution;
@@ -271,7 +291,12 @@ contract Project{
         title=projectTitle;
         desc=projectDes;
         currentState=state;
+        //NOTE: This is the balance of ETH left in the smart contract, we can ommit this and calculate this from the frontend for flexibility
         balance=address(this).balance;
+        website=websiteUrl;
+        social=socialUrl;
+        github = githubUrl;
+        projectCover=projectCoverUrl;
     }
 
 }

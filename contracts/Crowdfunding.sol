@@ -34,7 +34,7 @@ contract Crowdfunding is Ownable {
    // [X] Tiered reward rules needs to be mutable
 
    event ProjectStarted(
-      address projectContractAddress ,
+      address projectContractAddress,
       address creator,
       uint256 minContribution,
       uint256 projectDeadline,
@@ -43,7 +43,11 @@ contract Crowdfunding is Ownable {
       uint256 noOfContributors,
       string title,
       string desc,
-      uint256 currentState
+      uint256 currentState, 
+      string websiteUrl, 
+      string socialUrl, 
+      string projectCoverUrl, 
+      string filterTags
    );
 
    event ContributionReceived(
@@ -56,18 +60,20 @@ contract Crowdfunding is Ownable {
 
    // @dev Anyone can start a fund rising
    // @return null
-
    function createProject(
       uint256 minimumContribution,
       uint256 deadline,
       uint256 targetContribution,
       string memory projectTitle,
-      string memory projectDesc
+      string memory projectDesc,
+      string memory websiteUrl, 
+      string memory socialUrl, 
+      string memory githubUrl, 
+      string memory projectCoverUrl, 
+      string memory filterTags
    ) public {
 
-      deadline = deadline;
-
-      Project newProject = new Project(owner(), msg.sender, address(this), minimumContribution, deadline, targetContribution, projectTitle, projectDesc);
+      Project newProject = new Project(owner(), msg.sender, address(this), minimumContribution, deadline, targetContribution, projectTitle, projectDesc, websiteUrl, socialUrl, githubUrl, projectCoverUrl, filterTags);
       projects.push(newProject);
    
       emit ProjectStarted(
@@ -80,7 +86,11 @@ contract Crowdfunding is Ownable {
          0,
          projectTitle,
          projectDesc,
-         0
+         0, 
+         websiteUrl, 
+         socialUrl, 
+         projectCoverUrl, 
+         filterTags
       );
    }
 
@@ -206,6 +216,8 @@ contract Crowdfunding is Ownable {
 
       emit ContributionReceived(_projectAddress, amount, msg.sender);
    }
-
+   
+   /// @dev REMOVE WHEN DEPLOYING
+   fallback() external payable {}
 }
 
